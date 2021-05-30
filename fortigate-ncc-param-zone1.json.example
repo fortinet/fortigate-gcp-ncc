@@ -1,0 +1,19 @@
+{
+"project":			"gcp-project-name",
+"region":			"us-west2",
+"zone":				"us-west2-a",
+"ncc_vpc_ext":			"ncc-ext-name",
+"ncc_vpc_int":			"ncc-int-name",
+"ncc_hub":				"ncc-hub-name",
+"cloud_router":			"cr-name-zn1",
+"fortigate_spoke1":		"fortigate-name-zn1",
+"fortigate_spoke1_extip":	"publicip-name-zn1",
+"ncc_vpc_ext_cidr":		"192.168.225.0/24",
+"ncc_vpc_int_cidr":		"192.168.235.0/24",
+"fortigate_pwd":		"Password@1234",
+"cloud_router_ip1":		"192.168.225.101",
+"cloud_router_ip2":		"192.168.225.102",
+"cloud_router_asn":		"65025",
+"fortigate_router_id":		"169.250.221.254",
+"fortigate_router_asn":		"7265"
+}

@@ -1,0 +1,9 @@
+  
+# ignore license file
+*.lic
+
+#ignore txt file
+*.txt
+
+#ignore json file
+*.json
