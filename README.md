@@ -25,7 +25,7 @@ The provided script deploys VPC external/internal and all the necessary componen
 
 1) ***Staging Server*** : _A Linux environment can be used as a staging server. Alternatively Google Cloud CLI can also be used to run the script._
 	- Ensure to install googleapiclient, google.oauth2, google.auth, google.cloud on the runtime.
-	- Also install the packages PyJWT and cryptography using pip before continuing.
+- The packages PyJWT and cryptography must be installed using pip.
 
 2) ***Authentication***: _Google Cloud Service Account._
 	- Create a Google Cloud Service account with Owner Rights.
