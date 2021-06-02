@@ -2,7 +2,7 @@
 
 ## Introduction
 
-An SD-WAN Transit routing setup via Google Network Connectivity Center (NCC) allows Users to route Data and exchange BGP routing information between two or more Remote sites, via the Google Cloud Platform Infrastructure.
+An SD-WAN transit routing scenario with Google Network Connectivity Center (NCC) allows users to route data and exchange BGP routing information between two or more remote sites over the Google Cloud Platform Infrastructure.
 
 This is done, by creating the NCC HUB and an Endpoint (Spoke) for each Remote Site. In order to reduce Network latency, the Spoke is deployed in a Google Cloud region that is located geographically closest to the Remote Site for which it is created. 
 
