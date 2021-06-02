@@ -7,7 +7,8 @@ An SD-WAN transit routing scenario with Google Network Connectivity Center (NCC)
 Implementation is done by creating the NCC HUB and an endpoint (Spoke) for each remote site. In order to reduce Network latency, the Spoke is deployed in a Google Cloud region that is located geographically closest to the remote site for which it is created.
 
 The Script Included in this Repository Deploys Internal/External VPCs, NCC Hub, Spoke, Cloud Router and Fortigate-VM (Router Appliance) .
--	These come pre-configured with the variables input via the fortigate-ncc-param-zone1.json File.
+- Deployed items are pre-configured with the variables that are read from the parameter file `fortigate-ncc-param-zone1.json`.
+- ```
 -	Script Deploys a PAYG instance. List of the Order types can be found at [Fortigate Cloud VM Licensing Order Types](https://docs.fortinet.com/document/fortigate-public-cloud/7.0.0/gcp-administration-guide/451056/order-types)
 
 
