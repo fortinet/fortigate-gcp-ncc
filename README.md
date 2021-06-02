@@ -19,7 +19,7 @@ The Script Included in this Repository Deploys Internal/External VPCs, NCC Hub, 
 </p
 
 
-The provided script deploys VPC external/internal and all the necessary components in a Single Zone. The script has to be run again with changed variables in the fortigate-ncc-param-zone1.json file to deploy the components in the second zone and add them to the same HUB.
+The provided script deploys external/internal VPCs and all the necessary components into a Single Zone. To deploy the components in the second zone, the script has to be run again with changed variables and then added to the same HUB.
 
 
 ## Pre-requisites:
