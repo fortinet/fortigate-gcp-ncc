@@ -7,8 +7,8 @@ An SD-WAN transit routing scenario with Google Network Connectivity Center (NCC)
 Implementation is done by creating the NCC HUB and an endpoint (Spoke) for each remote site. In order to reduce Network latency, the Spoke is deployed in a Google Cloud region that is located geographically closest to the remote site for which it is created.
 
 The script included in this repository deploys Internal/External VPCs, an NCC hub, Spokes, Cloud Routers, and FortiGate-VM (Router Appliance) instances.
-- Deployed items are pre-configured with the variables that are read from the parameter file `fortigate-ncc-param-zone1.json`.
-- The script deploys a Pay as You Go (PAYG) FortiGate-VM instance. A list of the Order types can be found at [FortiGate Cloud VM Licensing Order Types](https://docs.fortinet.com/document/fortigate-public-cloud/7.0.0/gcp-administration-guide/451056/order-types).
+	- Deployed items are pre-configured with the variables that are read from the parameter file `fortigate-ncc-param-zone1.json`.
+	- The script deploys a Pay as You Go (PAYG) FortiGate-VM instance. A list of the Order types can be found at [FortiGate Cloud VM Licensing Order Types](https://docs.fortinet.com/document/fortigate-public-cloud/7.0.0/gcp-administration-guide/451056/order-types).
 
 
 ## Design
@@ -24,8 +24,8 @@ The provided script deploys external/internal VPCs and all the necessary compone
 ## Pre-requisites:
 
 1) ***Staging Server*** : _A Linux environment can be used as a staging server. Alternatively, Google Cloud CLI can also be used to run the script._
-- These must be installed on the runtime:  googleapiclient, google.oauth2, google.auth, google.cloud.
-- The packages PyJWT and cryptography must be installed using pip.
+	- These must be installed on the runtime:  googleapiclient, google.oauth2, google.auth, google.cloud.
+	- The packages PyJWT and cryptography must be installed using pip.
 
 2) ***Authentication***: _Google Cloud Service Account._
 	- Create a Google Cloud Service account with Owner Rights.
@@ -44,9 +44,8 @@ The provided script deploys external/internal VPCs and all the necessary compone
 
 On the Staging server, Run the following command :
 	
-	python3 deploy-fortigate-ncc.py /$path/apikey.json storage-bucket-name1 fortigate-ncc-param-zone1.json
-		
--	Please ensure to use the absolute path for the ApiKey
+	- python3 deploy-fortigate-ncc.py /$path/apikey.json storage-bucket-name1 fortigate-ncc-param-zone1.json
+	  Please ensure to use the absolute path for the ApiKey
 	
 
 ## Deployment Specifications
