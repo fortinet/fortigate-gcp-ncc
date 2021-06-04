@@ -188,6 +188,7 @@ class GCPComputeClient:
                 }
         request = self.compute_client.firewalls().insert(project=ncc_info['project'], body=firewall_body)
         response = request.execute()
+        return response
 
 
     def create_gcp_fw_egress(self, network):
@@ -207,6 +208,7 @@ class GCPComputeClient:
 
         request = self.compute_client.firewalls().insert(project=ncc_info['project'], body=firewall_body)
         response = request.execute()
+        return response
 
 
     def create_vpc(self, vpc_name):
@@ -240,11 +242,12 @@ class GCPComputeClient:
         elif status == 'None':
             address_body = {"name": self.ncc_info['fortigate_spoke1_extip']}
             request = self.compute_client.addresses().insert(project=ncc_info['project'], region=self.ncc_info['region'], body=address_body)
-            request.execute()
+            response = request.execute()
             logger.debug("Creating Public IP with the name %s ... ", ncc_info['fortigate_spoke1_extip'])
-            # gcp_compute_client.wait_for_network_operation(response['name'])
-            time.sleep(15)
+            gcp_compute_client.wait_for_subnetwork_operation(response['name'])
+            time.sleep(1)
             logger.debug("Created Public IP with the name %s ... ", ncc_info['fortigate_spoke1_extip'])
+            return response
 
 
 
@@ -307,6 +310,7 @@ class GCPComputeClient:
                 return result
 
             time.sleep(1)
+
 
     def vpc_exists(self,vpc_name):
         try:
@@ -624,12 +628,10 @@ if __name__ == '__main__':
         logger.debug("Creating subnetwork for VPC %s", ncc_info['ncc_vpc_int'])
         logger.debug("Successfully created subnetwork for VPC %s", ncc_info['ncc_vpc_int'])
 
-    #ncc_vpc_internal_subnets = create_subnets(ncc_vpc_internal,project, ncc_cidr_internal, NCC_Info['region'])
-
-
 
     # #creating NCC Hub
     gcp_rest_client.create_hub()
+
     # #Creating Router Appliance
     if gcp_compute_client.instance_exists(ncc_info['fortigate_spoke1']):
         logger.debug("Fortigate Instance with the name %s already exists", ncc_info['fortigate_spoke1'])
