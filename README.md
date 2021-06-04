@@ -8,7 +8,6 @@ Implementation is done by creating the NCC HUB and an endpoint (Spoke) for each 
 
 The script included in this repository deploys Internal/External VPCs, an NCC hub, Spokes, Cloud Routers, and FortiGate-VM (Router Appliance) instances.
 - Deployed items are pre-configured with the variables that are read from the parameter file `fortigate-ncc-param-zone1.json`.
-- ```
 - The script deploys a Pay as You Go (PAYG) FortiGate-VM instance. A list of the Order types can be found at [FortiGate Cloud VM Licensing Order Types](https://docs.fortinet.com/document/fortigate-public-cloud/7.0.0/gcp-administration-guide/451056/order-types).
 
 
@@ -26,7 +25,6 @@ The provided script deploys external/internal VPCs and all the necessary compone
 
 1) ***Staging Server*** : _A Linux environment can be used as a staging server. Alternatively, Google Cloud CLI can also be used to run the script._
 - These must be installed on the runtime:  googleapiclient, google.oauth2, google.auth, google.cloud.
-- ```
 - The packages PyJWT and cryptography must be installed using pip.
 
 2) ***Authentication***: _Google Cloud Service Account._
