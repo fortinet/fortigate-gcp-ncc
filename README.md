@@ -45,7 +45,8 @@ The provided script deploys external/internal VPCs and all the necessary compone
 On the Staging server, Run the following command :
 	
 	- python3 deploy-fortigate-ncc.py /$path/apikey.json storage-bucket-name1 fortigate-ncc-param-zone1.json
-	  Please ensure to use the absolute path for the ApiKey
+	
+	Please ensure to use the absolute path for the ApiKey
 	
 
 ## Deployment Specifications
