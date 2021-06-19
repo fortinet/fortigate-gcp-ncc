@@ -240,11 +240,12 @@ class GCPComputeClient:
         elif status == 'None':
             address_body = {"name": self.ncc_info['fortigate_spoke1_extip']}
             request = self.compute_client.addresses().insert(project=ncc_info['project'], region=self.ncc_info['region'], body=address_body)
-            request.execute()
+            response = request.execute()
             logger.debug("Creating Public IP with the name %s ... ", ncc_info['fortigate_spoke1_extip'])
-            # gcp_compute_client.wait_for_network_operation(response['name'])
-            time.sleep(15)
+            gcp_compute_client.wait_for_subnetwork_operation(response['name'])
+            time.sleep(1)
             logger.debug("Created Public IP with the name %s ... ", ncc_info['fortigate_spoke1_extip'])
+            return response
 
 
 
