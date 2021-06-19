@@ -188,7 +188,6 @@ class GCPComputeClient:
                 }
         request = self.compute_client.firewalls().insert(project=ncc_info['project'], body=firewall_body)
         response = request.execute()
-        return response
 
 
     def create_gcp_fw_egress(self, network):
@@ -208,7 +207,6 @@ class GCPComputeClient:
 
         request = self.compute_client.firewalls().insert(project=ncc_info['project'], body=firewall_body)
         response = request.execute()
-        return response
 
 
     def create_vpc(self, vpc_name):
@@ -242,12 +240,11 @@ class GCPComputeClient:
         elif status == 'None':
             address_body = {"name": self.ncc_info['fortigate_spoke1_extip']}
             request = self.compute_client.addresses().insert(project=ncc_info['project'], region=self.ncc_info['region'], body=address_body)
-            response = request.execute()
+            request.execute()
             logger.debug("Creating Public IP with the name %s ... ", ncc_info['fortigate_spoke1_extip'])
-            gcp_compute_client.wait_for_subnetwork_operation(response['name'])
-            time.sleep(1)
+            # gcp_compute_client.wait_for_network_operation(response['name'])
+            time.sleep(15)
             logger.debug("Created Public IP with the name %s ... ", ncc_info['fortigate_spoke1_extip'])
-            return response
 
 
 
@@ -310,7 +307,6 @@ class GCPComputeClient:
                 return result
 
             time.sleep(1)
-
 
     def vpc_exists(self,vpc_name):
         try:
@@ -429,7 +425,7 @@ class GCPRestClient:
 
 
     def create_hub(self):
-        url = "https://networkconnectivity.googleapis.com/v1alpha1/projects/" + self.ncc_info['project'] + "/locations/global/hubs/?hub_id=" + self.ncc_info['ncc_hub']
+        url = "https://networkconnectivity.googleapis.com/v1/projects/" + self.ncc_info['project'] + "/locations/global/hubs/?hub_id=" + self.ncc_info['ncc_hub']
         header = {'Authorization': 'Bearer ' + self.bearer_token}
         response = requests.post(url, headers=header)
         logger.debug("NCC hub created: %s", response.json())
@@ -437,17 +433,21 @@ class GCPRestClient:
 
     def create_spoke(self, ra_ip, ra):
         ncc_info = self.ncc_info
-        url = "https://networkconnectivity.googleapis.com/v1alpha1/projects/" + ncc_info['project'] + "/locations/" + ncc_info['region'] + "/spokes/?spoke_id=" + ncc_info['fortigate_spoke1']
+        url = "https://networkconnectivity.googleapis.com/v1/projects/" + ncc_info['project'] + "/locations/" + ncc_info['region'] + "/spokes/?spoke_id=" + ncc_info['fortigate_spoke1']
 
         auth_token = self.bearer_token
         data = {
             "name": ncc_info['fortigate_spoke1'],
             "hub": "http://networkconnectivity.googleapis.com/v1alpha1/projects/" + ncc_info['project'] + "/locations/global/hubs/" + ncc_info['ncc_hub'],
-            "linked_router_appliance_instances": [
+            "linkedRouterApplianceInstances": {
+                "instances": [
                 {
-                    "virtual_machine": ra,
-                    "ip_address": ra_ip
-                }]
+                    "virtualMachine": ra,
+                    "ipAddress": ra_ip
+                }
+                ],
+                "siteToSiteDataTransfer" : True
+            }
         }
         header = {'Authorization': 'Bearer ' + auth_token}
         response = requests.post(url, json=data, headers=header)
@@ -628,10 +628,12 @@ if __name__ == '__main__':
         logger.debug("Creating subnetwork for VPC %s", ncc_info['ncc_vpc_int'])
         logger.debug("Successfully created subnetwork for VPC %s", ncc_info['ncc_vpc_int'])
 
+    #ncc_vpc_internal_subnets = create_subnets(ncc_vpc_internal,project, ncc_cidr_internal, NCC_Info['region'])
+
+
 
     # #creating NCC Hub
     gcp_rest_client.create_hub()
-
     # #Creating Router Appliance
     if gcp_compute_client.instance_exists(ncc_info['fortigate_spoke1']):
         logger.debug("Fortigate Instance with the name %s already exists", ncc_info['fortigate_spoke1'])
