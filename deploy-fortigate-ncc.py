@@ -439,7 +439,7 @@ class GCPRestClient:
         auth_token = self.bearer_token
         data = {
             "name": ncc_info['fortigate_spoke1'],
-            "hub": "http://networkconnectivity.googleapis.com/v1alpha1/projects/" + ncc_info['project'] + "/locations/global/hubs/" + ncc_info['ncc_hub'],
+            "hub": "http://networkconnectivity.googleapis.com/v1/projects/" + ncc_info['project'] + "/locations/global/hubs/" + ncc_info['ncc_hub'],
             "linkedRouterApplianceInstances": {
                 "instances": [
                 {
