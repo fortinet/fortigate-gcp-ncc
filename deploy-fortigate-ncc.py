@@ -440,15 +440,11 @@ class GCPRestClient:
         data = {
             "name": ncc_info['fortigate_spoke1'],
             "hub": "http://networkconnectivity.googleapis.com/v1alpha1/projects/" + ncc_info['project'] + "/locations/global/hubs/" + ncc_info['ncc_hub'],
-            "linkedRouterApplianceInstances": {
-                "instances": [
+            "linked_router_appliance_instances": [
                 {
-                    "virtualMachine": ra,
-                    "ipAddress": ra_ip
-                }
-                ],
-                "siteToSiteDataTransfer" : True
-            }
+                    "virtual_machine": ra,
+                    "ip_address": ra_ip
+                }]
         }
         header = {'Authorization': 'Bearer ' + auth_token}
         response = requests.post(url, json=data, headers=header)
