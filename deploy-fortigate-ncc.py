@@ -426,7 +426,7 @@ class GCPRestClient:
 
 
     def create_hub(self):
-        url = "https://networkconnectivity.googleapis.com/v1/projects/" + self.ncc_info['project'] + "/locations/global/hubs/?hub_id=" + self.ncc_info['ncc_hub']
+        url = "https://networkconnectivity.googleapis.com/v1alpha1/projects/" + self.ncc_info['project'] + "/locations/global/hubs/?hub_id=" + self.ncc_info['ncc_hub']
         header = {'Authorization': 'Bearer ' + self.bearer_token}
         response = requests.post(url, headers=header)
         logger.debug("NCC hub created: %s", response.json())
@@ -434,7 +434,7 @@ class GCPRestClient:
 
     def create_spoke(self, ra_ip, ra):
         ncc_info = self.ncc_info
-        url = "https://networkconnectivity.googleapis.com/v1/projects/" + ncc_info['project'] + "/locations/" + ncc_info['region'] + "/spokes/?spoke_id=" + ncc_info['fortigate_spoke1']
+        url = "https://networkconnectivity.googleapis.com/v1alpha1/projects/" + ncc_info['project'] + "/locations/" + ncc_info['region'] + "/spokes/?spoke_id=" + ncc_info['fortigate_spoke1']
 
         auth_token = self.bearer_token
         data = {
