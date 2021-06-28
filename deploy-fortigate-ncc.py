@@ -432,7 +432,7 @@ class GCPRestClient:
         logger.debug("NCC hub created: %s", response.json())
         
 
-    def create_spoke(self, ra_ip, ra, sitetositeData):
+    def create_spoke(self, ra_ip, ra):
         ncc_info = self.ncc_info
         url = "https://networkconnectivity.googleapis.com/v1/projects/" + ncc_info['project'] + "/locations/" + ncc_info['region'] + "/spokes/?spoke_id=" + ncc_info['fortigate_spoke1']
 
@@ -447,7 +447,7 @@ class GCPRestClient:
                     "ipAddress": ra_ip
                 }
                 ],
-                "siteToSiteDataTransfer" : sitetositeData
+                "siteToSiteDataTransfer" : True
             }
         }
         header = {'Authorization': 'Bearer ' + auth_token}
@@ -655,5 +655,5 @@ if __name__ == '__main__':
     gcp_rest_client.create_cloud_router(spoke_info['ra_ip'], spoke_info['ra_link'])
 
     # #Registering NVA (FortiGate) GCP NCC hub
-    gcp_rest_client.create_spoke(spoke_info['ra_ip'], spoke_info['ra_link'], ncc_info['sitetositeData'])
+    gcp_rest_client.create_spoke(spoke_info['ra_ip'], spoke_info['ra_link'])
     logger.info("Deployment of Google NCC and FortiGate NVA have been Completed !")
