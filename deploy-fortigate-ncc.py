@@ -532,7 +532,7 @@ class GCPStorageClient:
 
         bucket = self.storage_client.bucket(bucket_name)
         blob = bucket.blob(blob_name)
-        json_data = blob.download_as_string().decode('utf-8').replace(' ','').replace('\n', '').replace('\t','')   
+        json_data = blob.download_as_bytes().replace(b' ', b'').replace(b'\n', b'').replace(b'\t', b'').replace(b'\r', b'')   
         return json.loads(json_data)
 
 
