@@ -426,25 +426,29 @@ class GCPRestClient:
 
 
     def create_hub(self):
-        url = "https://networkconnectivity.googleapis.com/v1alpha1/projects/" + self.ncc_info['project'] + "/locations/global/hubs/?hub_id=" + self.ncc_info['ncc_hub']
+        url = "https://networkconnectivity.googleapis.com/v1/projects/" + self.ncc_info['project'] + "/locations/global/hubs/?hub_id=" + self.ncc_info['ncc_hub']
         header = {'Authorization': 'Bearer ' + self.bearer_token}
         response = requests.post(url, headers=header)
         logger.debug("NCC hub created: %s", response.json())
         
 
-    def create_spoke(self, ra_ip, ra):
+    def create_spoke(self, ra_ip, ra, sitetositeData):
         ncc_info = self.ncc_info
-        url = "https://networkconnectivity.googleapis.com/v1alpha1/projects/" + ncc_info['project'] + "/locations/" + ncc_info['region'] + "/spokes/?spoke_id=" + ncc_info['fortigate_spoke1']
+        url = "https://networkconnectivity.googleapis.com/v1/projects/" + ncc_info['project'] + "/locations/" + ncc_info['region'] + "/spokes/?spoke_id=" + ncc_info['fortigate_spoke1']
 
         auth_token = self.bearer_token
         data = {
             "name": ncc_info['fortigate_spoke1'],
-            "hub": "http://networkconnectivity.googleapis.com/v1alpha1/projects/" + ncc_info['project'] + "/locations/global/hubs/" + ncc_info['ncc_hub'],
-            "linked_router_appliance_instances": [
+            "hub": "http://networkconnectivity.googleapis.com/v1/projects/" + ncc_info['project'] + "/locations/global/hubs/" + ncc_info['ncc_hub'],
+            "linkedRouterApplianceInstances": {
+                "instances": [
                 {
-                    "virtual_machine": ra,
-                    "ip_address": ra_ip
-                }]
+                    "virtualMachine": ra,
+                    "ipAddress": ra_ip
+                }
+                ],
+                "siteToSiteDataTransfer" : sitetositeData
+            }
         }
         header = {'Authorization': 'Bearer ' + auth_token}
         response = requests.post(url, json=data, headers=header)
