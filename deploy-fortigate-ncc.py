@@ -655,5 +655,5 @@ if __name__ == '__main__':
     gcp_rest_client.create_cloud_router(spoke_info['ra_ip'], spoke_info['ra_link'])
 
     # #Registering NVA (FortiGate) GCP NCC hub
-    gcp_rest_client.create_spoke(spoke_info['ra_ip'], spoke_info['ra_link'], spoke_info['sitetositeData'])
+    gcp_rest_client.create_spoke(spoke_info['ra_ip'], spoke_info['ra_link'], ncc_info['sitetositeData'])
     logger.info("Deployment of Google NCC and FortiGate NVA have been Completed !")
