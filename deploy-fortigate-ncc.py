@@ -629,13 +629,13 @@ if __name__ == '__main__':
         logger.debug("Creating subnetwork for VPC %s", ncc_info['ncc_vpc_int'])
         logger.debug("Successfully created subnetwork for VPC %s", ncc_info['ncc_vpc_int'])
 
-    #ncc_vpc_internal_subnets = create_subnets(ncc_vpc_internal,project, ncc_cidr_internal, NCC_Info['region'])
 
 
 
-    # #creating NCC Hub
+    # creating NCC Hub
     gcp_rest_client.create_hub()
-    # #Creating Router Appliance
+
+    # Creating Router Appliance
     if gcp_compute_client.instance_exists(ncc_info['fortigate_spoke1']):
         logger.debug("Fortigate Instance with the name %s already exists", ncc_info['fortigate_spoke1'])
         reply = str(input('(Type YES to continue , any other input will exit the program): ')).lower().strip()
@@ -649,11 +649,15 @@ if __name__ == '__main__':
         gcp_compute_client.wait_for_instance_operation(ra_fgt['name'])
 
 
-    # #Creating Cloud Router
+    # Creating Cloud Router
     spoke_info = gcp_compute_client.get_instance(ncc_info['fortigate_spoke1'])
     logger.debug("Retrived required FortiGate instance spoke info: %s", spoke_info)
+
+    # Registering NVA (FortiGate) GCP NCC hub
+    gcp_rest_client.create_spoke(spoke_info['ra_ip'], spoke_info['ra_link'], ncc_info['sitetositeData'])
+
+    # Creating Cloud Router
     gcp_rest_client.create_cloud_router(spoke_info['ra_ip'], spoke_info['ra_link'])
 
-    # #Registering NVA (FortiGate) GCP NCC hub
-    gcp_rest_client.create_spoke(spoke_info['ra_ip'], spoke_info['ra_link'], ncc_info['sitetositeData'])
+    # Execution Complete
     logger.info("Deployment of Google NCC and FortiGate NVA have been Completed !")
