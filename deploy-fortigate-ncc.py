@@ -457,7 +457,7 @@ class GCPRestClient:
 
     def create_cloud_router(self, ra_ip, ra):
         ncc_info = self.ncc_info
-        url = "https://www.googleapis.com/compute/beta/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/routers"
+        url = "https://www.googleapis.com/compute/v1/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/routers"
         int1 = ncc_info['cloud_router'] + "-0"
         int2 = ncc_info['cloud_router'] + "-1"
         bgp_peer1= ncc_info['cloud_router'] + "-0-bgp0"
@@ -497,14 +497,14 @@ class GCPRestClient:
                     "name": int1,
                     "privateIpAddress": cr_bgp_peer1_addr,
                     "redundantInterface": int2,
-                    "subnetwork": "https://www.googleapis.com/compute/beta/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/subnetworks/" + subnetwork
+                    "subnetwork": "https://www.googleapis.com/compute/v1/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/subnetworks/" + subnetwork
                 },
 
                 {
                     "name": int2,
                     "privateIpAddress": cr_bgp_peer2_addr,
                     "redundantInterface": int1,
-                    "subnetwork": "https://www.googleapis.com/compute/beta/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/subnetworks/" + subnetwork
+                    "subnetwork": "https://www.googleapis.com/compute/v1/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/subnetworks/" + subnetwork
                 }
             ],
             "name": ncc_info['cloud_router'],
