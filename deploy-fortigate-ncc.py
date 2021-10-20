@@ -426,25 +426,29 @@ class GCPRestClient:
 
 
     def create_hub(self):
-        url = "https://networkconnectivity.googleapis.com/v1alpha1/projects/" + self.ncc_info['project'] + "/locations/global/hubs/?hub_id=" + self.ncc_info['ncc_hub']
+        url = "https://networkconnectivity.googleapis.com/v1/projects/" + self.ncc_info['project'] + "/locations/global/hubs/?hub_id=" + self.ncc_info['ncc_hub']
         header = {'Authorization': 'Bearer ' + self.bearer_token}
         response = requests.post(url, headers=header)
         logger.debug("NCC hub created: %s", response.json())
         
 
-    def create_spoke(self, ra_ip, ra):
+    def create_spoke(self, ra_ip, ra, sitetositeData):
         ncc_info = self.ncc_info
-        url = "https://networkconnectivity.googleapis.com/v1alpha1/projects/" + ncc_info['project'] + "/locations/" + ncc_info['region'] + "/spokes/?spoke_id=" + ncc_info['fortigate_spoke1']
+        url = "https://networkconnectivity.googleapis.com/v1/projects/" + ncc_info['project'] + "/locations/" + ncc_info['region'] + "/spokes/?spoke_id=" + ncc_info['fortigate_spoke1']
 
         auth_token = self.bearer_token
         data = {
             "name": ncc_info['fortigate_spoke1'],
-            "hub": "http://networkconnectivity.googleapis.com/v1alpha1/projects/" + ncc_info['project'] + "/locations/global/hubs/" + ncc_info['ncc_hub'],
-            "linked_router_appliance_instances": [
+            "hub": "http://networkconnectivity.googleapis.com/v1/projects/" + ncc_info['project'] + "/locations/global/hubs/" + ncc_info['ncc_hub'],
+            "linkedRouterApplianceInstances": {
+                "instances": [
                 {
-                    "virtual_machine": ra,
-                    "ip_address": ra_ip
-                }]
+                    "virtualMachine": ra,
+                    "ipAddress": ra_ip
+                }
+                ],
+                "siteToSiteDataTransfer" : sitetositeData
+            }
         }
         header = {'Authorization': 'Bearer ' + auth_token}
         response = requests.post(url, json=data, headers=header)
@@ -453,7 +457,7 @@ class GCPRestClient:
 
     def create_cloud_router(self, ra_ip, ra):
         ncc_info = self.ncc_info
-        url = "https://www.googleapis.com/compute/beta/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/routers"
+        url = "https://www.googleapis.com/compute/v1/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/routers"
         int1 = ncc_info['cloud_router'] + "-0"
         int2 = ncc_info['cloud_router'] + "-1"
         bgp_peer1= ncc_info['cloud_router'] + "-0-bgp0"
@@ -493,14 +497,14 @@ class GCPRestClient:
                     "name": int1,
                     "privateIpAddress": cr_bgp_peer1_addr,
                     "redundantInterface": int2,
-                    "subnetwork": "https://www.googleapis.com/compute/beta/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/subnetworks/" + subnetwork
+                    "subnetwork": "https://www.googleapis.com/compute/v1/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/subnetworks/" + subnetwork
                 },
 
                 {
                     "name": int2,
                     "privateIpAddress": cr_bgp_peer2_addr,
                     "redundantInterface": int1,
-                    "subnetwork": "https://www.googleapis.com/compute/beta/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/subnetworks/" + subnetwork
+                    "subnetwork": "https://www.googleapis.com/compute/v1/projects/" + ncc_info['project'] + "/regions/" + ncc_info['region'] + "/subnetworks/" + subnetwork
                 }
             ],
             "name": ncc_info['cloud_router'],
@@ -625,13 +629,13 @@ if __name__ == '__main__':
         logger.debug("Creating subnetwork for VPC %s", ncc_info['ncc_vpc_int'])
         logger.debug("Successfully created subnetwork for VPC %s", ncc_info['ncc_vpc_int'])
 
-    #ncc_vpc_internal_subnets = create_subnets(ncc_vpc_internal,project, ncc_cidr_internal, NCC_Info['region'])
 
 
 
-    # #creating NCC Hub
+    # creating NCC Hub
     gcp_rest_client.create_hub()
-    # #Creating Router Appliance
+
+    # Creating Router Appliance
     if gcp_compute_client.instance_exists(ncc_info['fortigate_spoke1']):
         logger.debug("Fortigate Instance with the name %s already exists", ncc_info['fortigate_spoke1'])
         reply = str(input('(Type YES to continue , any other input will exit the program): ')).lower().strip()
@@ -645,11 +649,15 @@ if __name__ == '__main__':
         gcp_compute_client.wait_for_instance_operation(ra_fgt['name'])
 
 
-    # #Creating Cloud Router
+    # Creating Cloud Router
     spoke_info = gcp_compute_client.get_instance(ncc_info['fortigate_spoke1'])
     logger.debug("Retrived required FortiGate instance spoke info: %s", spoke_info)
+
+    # Registering NVA (FortiGate) GCP NCC hub
+    gcp_rest_client.create_spoke(spoke_info['ra_ip'], spoke_info['ra_link'], ncc_info['sitetositeData'])
+
+    # Creating Cloud Router
     gcp_rest_client.create_cloud_router(spoke_info['ra_ip'], spoke_info['ra_link'])
 
-    # #Registering NVA (FortiGate) GCP NCC hub
-    gcp_rest_client.create_spoke(spoke_info['ra_ip'], spoke_info['ra_link'])
+    # Execution Complete
     logger.info("Deployment of Google NCC and FortiGate NVA have been Completed !")

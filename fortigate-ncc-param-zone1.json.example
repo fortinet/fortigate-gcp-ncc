@@ -7,6 +7,7 @@
 "ncc_hub":				"ncc-hub-name",
 "cloud_router":			"cr-name-zn1",
 "fortigate_spoke1":		"fortigate-name-zn1",
+"sitetositeData":		"True",
 "fortigate_spoke1_extip":	"publicip-name-zn1",
 "ncc_vpc_ext_cidr":		"192.168.225.0/24",
 "ncc_vpc_int_cidr":		"192.168.235.0/24",
